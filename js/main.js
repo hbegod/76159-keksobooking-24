@@ -2,7 +2,7 @@
 import { getRandomPositiveInteger } from './utils/get-random-positive-integer.js';
 import { getRandomPositiveFloat } from './utils/get-random-positive-float.js';
 
-const TITLE = [
+const TITLES = [
   'Прекрасная квартира для путешественника',
   'Замечательный дом для семейной пары с детьми',
   'Студия для угрюмого интроверта',
@@ -10,7 +10,7 @@ const TITLE = [
   'Нора для господина с черезвычайно волосатыми ногами',
 ];
 
-const TYPE = [
+const TYPES = [
   'palace',
   'flat',
   'house',
@@ -33,7 +33,7 @@ const FEATURES = [
   'conditioner',
 ];
 
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   'Номер класса «комфорт» в новом комплексе VALO Hotel City. Через дорогу от метро Бухарестская и 10 минутах езды от транспортной развязки. До аэропорта 25 минут и до Московского вокзала 15 минут на такси.',
   'Просторный двухместный номер площадью 24 кв. м. Панорамные окна с живописным видом днем и шторы блэк аут (полностью затемняют номер) ночью. Широкая двуспальная кровать или две отдельных кровати на выбор.',
   'Есть вся бытовая техника – от фена до стиральной машины. Встроенная кухня с посудой, кухонными принадлежностями и посудомоечной машиной. Ванная комната с немецкой сантехникой. Завтрак с доставкой в номер.',
@@ -56,67 +56,47 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 
 const createRandomArray = (arrayForGeneration, numberOfElementsInArray) => {
   const randArrayElementGenerator = () => getRandomArrayElement(arrayForGeneration);
-  return Array.from({length:numberOfElementsInArray}, randArrayElementGenerator);
+  return Array.from({length: numberOfElementsInArray}, randArrayElementGenerator);
 };
 
 const createRandomArrayUnic = (arrayForGeneration, numberOfElementsInArray) =>{
-  let randomUnicArray = arrayForGeneration.slice();
+  const randomUnicArray = arrayForGeneration.slice();
   while(randomUnicArray.length > numberOfElementsInArray && randomUnicArray.length > 1)
   {
-    randomUnicArray.splice(getRandomPositiveInteger(0,randomUnicArray.length),1);
+    randomUnicArray.splice(getRandomPositiveInteger(0, randomUnicArray.length), 1);
   }
   return randomUnicArray;
 };
 
-function createRandomIdFromRangeGenerator (min, max) {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomPositiveInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomPositiveInteger(min, max);
-    }
-    previousValues.push(currentValue);
-
-    return STRING_FOR_AVATAR_URL.replace('{{xx}}', currentValue.toString().padStart(2,'0'));
-  };
-}
-
-const generateAuthorAvatar = createRandomIdFromRangeGenerator(1,10);
+let authorId = 0;
 
 const createAdvertisement = () => {
-  const location = {
-    lat: getRandomPositiveFloat(35.65000,35.70000,5),
-    lng: getRandomPositiveFloat(139.70000,139.80000,5),
-  };
+  const lat = getRandomPositiveFloat(35.65000, 35.70000,5);
+  const lng = getRandomPositiveFloat(139.70000, 139.80000,5);
+  authorId = ++authorId;
+
   return {
     author: {
-      avatar: generateAuthorAvatar(),
+      avatar: STRING_FOR_AVATAR_URL.replace('{{xx}}', authorId.toString().padStart(2, '0')),
     },
     offer: {
-      title: getRandomArrayElement(TITLE),
-      address: Object.values(location).join(', '),
-      price: getRandomPositiveInteger(5000,20000),
-      type: getRandomArrayElement(TYPE),
-      rooms: getRandomPositiveInteger(1,4),
-      guests: getRandomPositiveInteger(1,4),
+      title: getRandomArrayElement(TITLES),
+      address: `${lat}, ${lng}`,
+      price: getRandomPositiveInteger(5000, 20000),
+      type: getRandomArrayElement(TYPES),
+      rooms: getRandomPositiveInteger(1, 4),
+      guests: getRandomPositiveInteger(1, 4),
       checkin: getRandomArrayElement(TIME_FOR_CHECIKN_AND_CHECKOUT),
       checkout: getRandomArrayElement(TIME_FOR_CHECIKN_AND_CHECKOUT),
-      features: createRandomArrayUnic(FEATURES,getRandomPositiveInteger(1,6)),
-      description: getRandomArrayElement(DESCRIPTION),
+      features: createRandomArrayUnic(FEATURES, getRandomPositiveInteger(1,6)),
+      description: getRandomArrayElement(DESCRIPTIONS),
       photos: createRandomArray(PHOTOS, getRandomPositiveInteger(1,6)),
     },
     location:{
-      lat: location.lat,
-      lng: location.lng,
+      lat: lat,
+      lng: lng,
     },
   };
 };
 
-const similarAdvertisements = Array.from({length:SIMILAR_ADVERTISEMENTS_COUNT}, createAdvertisement);
-
-console.log(similarAdvertisements);
-console.log('');
+const similarAdvertisements = Array.from({length: SIMILAR_ADVERTISEMENTS_COUNT}, createAdvertisement);
