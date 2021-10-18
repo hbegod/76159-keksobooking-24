@@ -46,6 +46,8 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
+const SIMILAR_ADVERTISEMENTS_COUNT = 10;
+
 const STRING_FOR_AVATAR_URL = 'img/avatars/user{{xx}}.png';
 
 let authorId = 0;
@@ -79,4 +81,6 @@ const createAdvertisement = () => {
   };
 };
 
-export{createAdvertisement};
+const createAdvertisements = () => new Array(SIMILAR_ADVERTISEMENTS_COUNT).fill(null).map(() => createAdvertisement());
+
+export{createAdvertisements};
