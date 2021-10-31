@@ -8,9 +8,9 @@ const roomNumberSelect = document.querySelector('#room_number');
 const capacitySelect = document.querySelector('#capacity');
 
 const addValidation = () => {
-  titleInput.addEventListener('input', () => {
+  titleInput.addEventListener('input', (evt) => {
 
-    const titleLength = titleInput.value.length;
+    const titleLength = evt.target.value.length;
 
     if (titleLength < MIN_TITLE_LENGTH) {
       titleInput.setCustomValidity(`Ещё ${ MIN_TITLE_LENGTH - titleLength } симв.`);
@@ -22,9 +22,9 @@ const addValidation = () => {
     titleInput.reportValidity();
   });
 
-  priceInput.addEventListener('input', () => {
+  priceInput.addEventListener('input', (evt) => {
 
-    const priceForNight = priceInput.value;
+    const priceForNight = evt.target.value;
 
     if(priceForNight > MAX_PRICE_SUM) {
       priceInput.setCustomValidity(`Максимальная цена за ночь ${ MAX_PRICE_SUM } руб.`);
@@ -35,11 +35,14 @@ const addValidation = () => {
     priceInput.reportValidity();
   });
 
-  roomNumberSelect.addEventListener('input', () => {
+  roomNumberSelect.addEventListener('input', (evt) => {
 
-    switch(roomNumberSelect.value) {
+    const roomNumber = evt.target.value;
+    const capacity = capacitySelect.value;
+
+    switch(roomNumber) {
       case '1':
-        if(capacitySelect.value === '1') {
+        if(capacity === '1') {
           capacitySelect.setCustomValidity('');
         }
         else {
@@ -48,7 +51,7 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '2':
-        if(capacitySelect.value === '1' || capacitySelect.value === '2') {
+        if(capacity === '1' || capacity === '2') {
           capacitySelect.setCustomValidity('');
         }
         else {
@@ -57,7 +60,7 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '3':
-        if(capacitySelect.value === '1' || capacitySelect.value === '2' || capacitySelect.value === '3') {
+        if(capacity === '1' || capacity === '2' || capacity === '3') {
           capacitySelect.setCustomValidity('');
         }
         else {
@@ -66,7 +69,7 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '100':
-        if(capacitySelect.value === '0') {
+        if(capacity === '0') {
           capacitySelect.setCustomValidity('');
         } else {
           capacitySelect.setCustomValidity('Должна быть выбрана опция "Не для гостей"');
@@ -76,15 +79,18 @@ const addValidation = () => {
     }
   });
 
-  capacitySelect.addEventListener('input', () => {
+  capacitySelect.addEventListener('input', (evt) => {
 
-    switch(capacitySelect.value) {
+    const capacity = evt.target.value;
+    const roomNumber = roomNumberSelect.value;
+
+    switch(capacity) {
       case '1':
-        if(roomNumberSelect.value === '1') {
+        if(roomNumber === '1') {
           capacitySelect.setCustomValidity('');
-        } else if(roomNumberSelect.value === '2') {
+        } else if(roomNumber === '2') {
           capacitySelect.setCustomValidity('');
-        } else if(roomNumberSelect.value === '3') {
+        } else if(roomNumber === '3') {
           capacitySelect.setCustomValidity('');
         }
         else {
@@ -93,11 +99,11 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '2':
-        if(roomNumberSelect.value === '1') {
+        if(roomNumber === '1') {
           capacitySelect.setCustomValidity('Количество мест для 1 гостя');
-        } else if(roomNumberSelect.value === '2') {
+        } else if(roomNumber === '2') {
           capacitySelect.setCustomValidity('');
-        } else if(roomNumberSelect.value === '3') {
+        } else if(roomNumber === '3') {
           capacitySelect.setCustomValidity('');
         } else {
           capacitySelect.setCustomValidity('Должна быть выбрана опция "Не для гостей"');
@@ -105,11 +111,11 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '3':
-        if(roomNumberSelect.value === '1') {
+        if(roomNumber === '1') {
           capacitySelect.setCustomValidity('Количество мест для 1 гостя');
-        } else if(roomNumberSelect.value === '2') {
+        } else if(roomNumber === '2') {
           capacitySelect.setCustomValidity('Количество мест для 2 или 1 гостя');
-        } else if(roomNumberSelect.value === '3') {
+        } else if(roomNumber === '3') {
           capacitySelect.setCustomValidity('');
         } else {
           capacitySelect.setCustomValidity('Должна быть выбрана опция "Не для гостей"');
@@ -117,11 +123,11 @@ const addValidation = () => {
         capacitySelect.reportValidity();
         break;
       case '0':
-        if(roomNumberSelect.value === '1') {
+        if(roomNumber === '1') {
           capacitySelect.setCustomValidity('Количество мест для 1 гостя');
-        } else if(roomNumberSelect.value === '2') {
+        } else if(roomNumber === '2') {
           capacitySelect.setCustomValidity('Количество мест для 2 или 1 гостя');
-        } else if(roomNumberSelect.value === '3') {
+        } else if(roomNumber === '3') {
           capacitySelect.setCustomValidity('Количество мест для 3, 2 или 1 гостя');
         } else {
           capacitySelect.setCustomValidity('');
