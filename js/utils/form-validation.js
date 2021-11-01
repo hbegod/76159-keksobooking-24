@@ -14,6 +14,40 @@ const capacitySelect = document.querySelector('#capacity');
 const housingTypeSelect = document.querySelector('#type');
 const timeInSelect = document.querySelector('#timein');
 const timeOutSelect = document.querySelector('#timeout');
+const addAdvertForm = document.querySelector('.ad-form');
+const addAdvertFormHeader = addAdvertForm.querySelector('.ad-form-header');
+const addAdvertFormElements = addAdvertForm.querySelectorAll('.ad-form__element');
+const mapFiltersForm = document.querySelector('.map__filters');
+const mapFiltersFormFeatures = mapFiltersForm.querySelector('.map__features');
+const mapFiltersFormElements = mapFiltersForm.querySelectorAll('.map__filter');
+
+
+const makePageInactive = () => {
+  addAdvertForm.classList.add('ad-form--disabled');
+  addAdvertFormHeader.setAttribute('disabled', 'disabled');
+  addAdvertFormElements.forEach( (element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+  mapFiltersForm.classList.add('map__filters--disabled');
+  mapFiltersFormFeatures.setAttribute('disabled', 'disabled');
+  mapFiltersFormElements.forEach( (element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+
+};
+
+const makePageActive = () => {
+  addAdvertForm.classList.remove('ad-form--disabled');
+  addAdvertFormHeader.removeAttribute('disabled');
+  addAdvertFormElements.forEach( (element) => {
+    element.removeAttribute('disabled');
+  });
+  mapFiltersForm.classList.remove('map__filters--disabled');
+  mapFiltersFormFeatures.removeAttribute('disabled');
+  mapFiltersFormElements.forEach( (element) => {
+    element.removeAttribute('disabled');
+  });
+};
 
 const checkMinPrice = (price, housingTypeValue, changePlaceholder) => {
   switch(housingTypeValue) {
@@ -228,5 +262,4 @@ const addValidation = () => {
   });
 };
 
-export {addValidation};
-
+export {addValidation, makePageInactive, makePageActive};
