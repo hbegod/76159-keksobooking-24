@@ -12,22 +12,63 @@ const priceInput = document.querySelector('#price');
 const roomNumberSelect = document.querySelector('#room_number');
 const capacitySelect = document.querySelector('#capacity');
 const housingTypeSelect = document.querySelector('#type');
+const timeInSelect = document.querySelector('#timein');
+const timeOutSelect = document.querySelector('#timeout');
 
-const checkMinPrice = (price, housingTypeValue) => {
+const checkMinPrice = (price, housingTypeValue, changePlaceholder) => {
   switch(housingTypeValue) {
     case 'bungalow':
-      break;
-    case '':
-      break;
-    case '':
-      break;
-    case '':
-      break;
-    case '':
-      break;
+      if(changePlaceholder) {
+        priceInput.placeholder = MIN_PRICE_SUM_BUNGALOW;
+      }
+      if(price < MIN_PRICE_SUM_BUNGALOW) {
+        priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_BUNGALOW } руб.`);
+        return true;
+      } else {
+        return false;
+      }
+    case 'flat':
+      if(changePlaceholder) {
+        priceInput.placeholder = MIN_PRICE_SUM_FLAT;
+      }
+      if(price < MIN_PRICE_SUM_FLAT) {
+        priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_FLAT } руб.`);
+        return true;
+      } else {
+        return false;
+      }
+    case 'hotel':
+      if(changePlaceholder) {
+        priceInput.placeholder = MIN_PRICE_SUM_HOTEL;
+      }
+      if(price < MIN_PRICE_SUM_HOTEL) {
+        priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_HOTEL } руб.`);
+        return true;
+      } else {
+        return false;
+      }
+    case 'house':
+      if(changePlaceholder) {
+        priceInput.placeholder = MIN_PRICE_SUM_HOUSE;
+      }
+      if(price < MIN_PRICE_SUM_HOUSE) {
+        priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_HOUSE } руб.`);
+        return true;
+      } else {
+        return false;
+      }
+    case 'palace':
+      if(changePlaceholder) {
+        priceInput.placeholder = MIN_PRICE_SUM_PALACE;
+      }
+      if(price < MIN_PRICE_SUM_PALACE) {
+        priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_PALACE } руб.`);
+        return true;
+      } else {
+        return false;
+      }
   }
-  return false;
-}
+};
 
 const addValidation = () => {
   titleInput.addEventListener('input', (evt) => {
@@ -49,15 +90,16 @@ const addValidation = () => {
     const priceForNight = evt.target.value;
     const housingTypeValue = housingTypeSelect.value;
 
-    if(checkMinPrice(priceForNight, housingTypeValue)) {
-      priceInput.setCustomValidity(`Минимальная цена за ночь ${ MAX_PRICE_SUM } руб.`);
+    if(checkMinPrice(priceForNight, housingTypeValue, false)) {
+      priceInput.reportValidity();
     } else if(priceForNight > MAX_PRICE_SUM) {
       priceInput.setCustomValidity(`Максимальная цена за ночь ${ MAX_PRICE_SUM } руб.`);
+      priceInput.reportValidity();
     }
     else {
       priceInput.setCustomValidity('');
+      priceInput.reportValidity();
     }
-    priceInput.reportValidity();
   });
 
   roomNumberSelect.addEventListener('input', (evt) => {
@@ -167,48 +209,22 @@ const addValidation = () => {
     const housingType = evt.target.value;
     const priceForNight = priceInput.value;
 
-    switch(housingType) {
-      case 'bungalow':
-        if(priceForNight < MIN_PRICE_SUM_BUNGALOW) {
-          priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_BUNGALOW } руб.`);
-        } else {
-          priceInput.setCustomValidity('');
-        }
-        priceInput.reportValidity();
-        break;
-      case 'flat':
-        if(priceForNight < MIN_PRICE_SUM_FLAT) {
-          priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_FLAT } руб.`);
-        } else {
-          priceInput.setCustomValidity('');
-        }
-        priceInput.reportValidity();
-        break;
-      case 'hotel':
-        if(priceForNight < MIN_PRICE_SUM_HOTEL) {
-          priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_HOTEL } руб.`);
-        } else {
-          priceInput.setCustomValidity('');
-        }
-        priceInput.reportValidity();
-        break;
-      case 'house':
-        if(priceForNight < MIN_PRICE_SUM_HOUSE) {
-          priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_HOUSE } руб.`);
-        } else {
-          priceInput.setCustomValidity('');
-        }
-        priceInput.reportValidity();
-        break;
-      case 'palace':
-        if(priceForNight < MIN_PRICE_SUM_PALACE) {
-          priceInput.setCustomValidity(`Минимальная цена за ночь ${ MIN_PRICE_SUM_PALACE } руб.`);
-        } else {
-          priceInput.setCustomValidity('');
-        }
-        priceInput.reportValidity();
-        break;
+    if(checkMinPrice(priceForNight, housingType, true)) {
+      priceInput.reportValidity();
+    } else {
+      priceInput.setCustomValidity('');
+      priceInput.reportValidity();
     }
+  });
+
+  timeInSelect.addEventListener('input', (evt) => {
+    const timeInValue = evt.target.value;
+    timeOutSelect.value = timeInValue;
+  });
+
+  timeOutSelect.addEventListener('input', (evt) => {
+    const timeOutValue = evt.target.value;
+    timeInSelect.value = timeOutValue;
   });
 };
 
