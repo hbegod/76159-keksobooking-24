@@ -48,8 +48,6 @@ const PHOTOS = [
 
 const SIMILAR_ADVERTISEMENTS_COUNT = 10;
 
-const STRING_FOR_AVATAR_URL = 'img/avatars/user{{xx}}.png';
-
 let authorId = 0;
 
 const createAdvertisement = () => {
@@ -59,7 +57,7 @@ const createAdvertisement = () => {
 
   return {
     author: {
-      avatar: STRING_FOR_AVATAR_URL.replace('{{xx}}', authorId.toString().padStart(2, '0')),
+      avatar: `img/avatars/user${authorId.toString().padStart(2, '0')}.png`,
     },
     offer: {
       title: getRandomArrayElement(TITLES),
@@ -83,4 +81,4 @@ const createAdvertisement = () => {
 
 const createAdvertisements = () => new Array(SIMILAR_ADVERTISEMENTS_COUNT).fill(null).map(() => createAdvertisement());
 
-export{createAdvertisements};
+export{createAdvertisement, createAdvertisements};

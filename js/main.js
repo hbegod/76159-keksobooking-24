@@ -1,5 +1,10 @@
-import { writeBlockForTemplateTest } from './utils/markup-generation.js';
-import {addValidation, makePageInactive, makePageActive} from './utils/form-validation.js';
+import {addValidation, makePageInactive} from './utils/form-validation.js';
+import {addMapToPage, createMainAddressMarker, createSecondaryAddressMarkers} from './utils/map-interaction.js';
+import {createAdvertisements} from './data.js';
+makePageInactive();
 addValidation();
-writeBlockForTemplateTest();
+addMapToPage();
+createMainAddressMarker();
+createSecondaryAddressMarkers(createAdvertisements());
+
 
