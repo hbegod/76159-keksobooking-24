@@ -1,15 +1,13 @@
 import { safeMarkupGeneration, safeMarkupGenerationString, safeMarkupGenerationType, safeMarkupGenerationFeatures, safeMarkupGenerationPhotos, safeMarkupGenerationAvatar } from './util.js';
-import { createAdvertisements } from '../data.js';
 
-const blockForTemplateTest = document.querySelector('.map__canvas');
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-const similarAdvertisements = createAdvertisements();
-const advertismentFragment = document.createDocumentFragment();
 const housingTypeContainer = document.querySelector('#type');
 const housingTypeList = housingTypeContainer.querySelectorAll('option');
 
+const createSimilarAdvertismentMarkup = (advertisment) => {
 
-similarAdvertisements.forEach( ({author, offer}) => {
+  const {author, offer} = advertisment;
+
   const advertismentElement = cardTemplate.cloneNode(true);
   const popupTitle = advertismentElement.querySelector('.popup__title');
   const popupTextAdress = advertismentElement.querySelector('.popup__text--address');
@@ -36,9 +34,7 @@ similarAdvertisements.forEach( ({author, offer}) => {
   safeMarkupGenerationPhotos(popupPhotos, offer.photos);
   safeMarkupGenerationAvatar(popupAvatar, author.avatar);
 
-  advertismentFragment.appendChild(advertismentElement);
-});
+  return advertismentElement;
+};
 
-const writeBlockForTemplateTest = () => blockForTemplateTest.appendChild(advertismentFragment.firstChild);
-
-export{writeBlockForTemplateTest};
+export{createSimilarAdvertismentMarkup};
