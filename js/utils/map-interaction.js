@@ -1,4 +1,4 @@
-import {makePageActive} from './form-validation.js';
+import {makeSendFormActive} from './form-validation.js';
 import {createSimilarAdvertismentMarkup} from './markup-generation.js';
 
 const TOKIO_LAT = 35.689722;
@@ -11,9 +11,26 @@ const icon = L.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40]});
 
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+
+const mainAddressMarker = L.marker(
+  {
+    lat: TOKIO_LAT,
+    lng: TOKIO_LNG,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
 const addMapToPage = () => {
   map.on('load', () => {
-    makePageActive();
+    makeSendFormActive();
   }).setView({
     lat: TOKIO_LAT,
     lng: TOKIO_LNG,
@@ -25,31 +42,20 @@ const addMapToPage = () => {
 };
 
 const createMainAddressMarker = () => {
-  const mainPinIcon = L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
-
-  const mainAddressMarker = L.marker(
-    {
-      lat: TOKIO_LAT,
-      lng: TOKIO_LNG,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-
   mainAddressMarker.addTo(map);
-
   address.value = `${TOKIO_LAT.toFixed(5)}, ${TOKIO_LNG.toFixed(5)}`;
-
-  mainAddressMarker.on('moveend', (evt) => {
+  mainAddressMarker.on('move', (evt) => {
     const addresValue = evt.target.getLatLng();
     address.value = `${addresValue.lat.toFixed(5)}, ${addresValue.lng.toFixed(5)}`;
   });
+};
+
+const putMainAddressMarkerToDefaultPos = () => {
+  mainAddressMarker.setLatLng(
+    {
+      lat: TOKIO_LAT,
+      lng: TOKIO_LNG,
+    });
 };
 
 const createSecondaryAddressMarker = (advertisment) => {
@@ -70,10 +76,15 @@ const createSecondaryAddressMarker = (advertisment) => {
   secondaryAddressMarker.addTo(map);
 };
 
+const clearPopup = () => {
+  map.removeLayer(secondaryAddressMarkerGroup);
+  map.addLayer(secondaryAddressMarkerGroup);
+};
+
 const createSecondaryAddressMarkers = (advertismentArray) => {
   advertismentArray.forEach( (advertisment) => {
     createSecondaryAddressMarker(advertisment);
   });
 };
 
-export {addMapToPage, createMainAddressMarker, createSecondaryAddressMarker, createSecondaryAddressMarkers};
+export {addMapToPage, createMainAddressMarker, createSecondaryAddressMarker, createSecondaryAddressMarkers, putMainAddressMarkerToDefaultPos, clearPopup};

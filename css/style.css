@@ -924,7 +924,8 @@ fieldset {
  */
 
 .success,
-.error {
+.error,
+.errorGet {
   position: fixed;
   top: 0;
   left: 0;

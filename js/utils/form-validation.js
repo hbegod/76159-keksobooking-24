@@ -1,3 +1,6 @@
+import {putMainAddressMarkerToDefaultPos, clearPopup} from './map-interaction.js';
+import { sendData } from './server-interaction.js';
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_SUM = 1000000;
@@ -7,16 +10,19 @@ const MIN_PRICE_SUM_HOTEL = 3000;
 const MIN_PRICE_SUM_HOUSE = 5000;
 const MIN_PRICE_SUM_PALACE = 10000;
 
-const titleInput = document.querySelector('#title');
-const priceInput = document.querySelector('#price');
-const roomNumberSelect = document.querySelector('#room_number');
-const capacitySelect = document.querySelector('#capacity');
-const housingTypeSelect = document.querySelector('#type');
-const timeInSelect = document.querySelector('#timein');
-const timeOutSelect = document.querySelector('#timeout');
 const addAdvertForm = document.querySelector('.ad-form');
+const titleInput = addAdvertForm.querySelector('#title');
+const priceInput = addAdvertForm.querySelector('#price');
+const roomNumberSelect = addAdvertForm.querySelector('#room_number');
+const descriptionTextArea = addAdvertForm.querySelector('#description');
+const capacitySelect = addAdvertForm.querySelector('#capacity');
+const housingTypeSelect = addAdvertForm.querySelector('#type');
+const timeInSelect = addAdvertForm.querySelector('#timein');
+const timeOutSelect = addAdvertForm.querySelector('#timeout');
 const addAdvertFormHeader = addAdvertForm.querySelector('.ad-form-header');
 const addAdvertFormElements = addAdvertForm.querySelectorAll('.ad-form__element');
+const addAdvertFormCheckBox = addAdvertForm.querySelectorAll('.features__checkbox');
+const clearFormButton = addAdvertForm.querySelector('.ad-form__reset');
 const mapFiltersForm = document.querySelector('.map__filters');
 const mapFiltersFormFeatures = mapFiltersForm.querySelector('.map__features');
 const mapFiltersFormElements = mapFiltersForm.querySelectorAll('.map__filter');
@@ -36,12 +42,15 @@ const makePageInactive = () => {
 
 };
 
-const makePageActive = () => {
+const makeSendFormActive = () => {
   addAdvertForm.classList.remove('ad-form--disabled');
   addAdvertFormHeader.removeAttribute('disabled');
   addAdvertFormElements.forEach( (element) => {
     element.removeAttribute('disabled');
   });
+};
+
+const makeFilterFormActive = () => {
   mapFiltersForm.classList.remove('map__filters--disabled');
   mapFiltersFormFeatures.removeAttribute('disabled');
   mapFiltersFormElements.forEach( (element) => {
@@ -262,4 +271,43 @@ const addValidation = () => {
   });
 };
 
-export {addValidation, makePageInactive, makePageActive};
+const clearFormData = () => {
+  titleInput.value = '';
+  priceInput.value = '';
+  addAdvertFormCheckBox.forEach( (checkbox) => {
+    checkbox.checked = false;
+  });
+  descriptionTextArea.value = '';
+  housingTypeSelect.selectedIndex = 3;
+  const event = new Event('input');
+  housingTypeSelect.dispatchEvent(event);
+  timeInSelect.selectedIndex = 0;
+  timeOutSelect.selectedIndex = 0;
+  roomNumberSelect.selectedIndex = 0;
+  capacitySelect.selectedIndex = 2;
+  putMainAddressMarkerToDefaultPos();
+  clearPopup();
+};
+
+const addSubmiitListner = (onSuccess, onError) => {
+  addAdvertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => onError(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+const addClearFormListener = () => {
+  clearFormButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    clearFormData();
+  });
+
+};
+
+
+export {addValidation, makePageInactive, makeSendFormActive, makeFilterFormActive, clearFormData, addSubmiitListner, addClearFormListener};
