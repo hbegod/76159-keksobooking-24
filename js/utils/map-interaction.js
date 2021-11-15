@@ -82,7 +82,8 @@ const clearPopup = () => {
 };
 
 const createSecondaryAddressMarkers = (advertismentArray) => {
-  advertismentArray.forEach( (advertisment) => {
+  const slicedArray = advertismentArray.slice(0,10);
+  slicedArray.forEach( (advertisment) => {
     createSecondaryAddressMarker(advertisment);
   });
 };
