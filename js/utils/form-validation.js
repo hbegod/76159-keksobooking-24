@@ -9,6 +9,8 @@ const MIN_PRICE_SUM_FLAT = 1000;
 const MIN_PRICE_SUM_HOTEL = 3000;
 const MIN_PRICE_SUM_HOUSE = 5000;
 const MIN_PRICE_SUM_PALACE = 10000;
+const MIN_PRICE_SUM_FILTER = 10000;
+const MAX_PRICE_SUM_FILTER = 50000;
 
 const addAdvertForm = document.querySelector('.ad-form');
 const titleInput = addAdvertForm.querySelector('#title');
@@ -305,11 +307,11 @@ const filterByPrice = (advertisment) => {
     case 'any':
       return true;
     case 'middle':
-      return advertisment.offer.price >= 10000 && advertisment.offer.price <= 50000;
+      return advertisment.offer.price >= MIN_PRICE_SUM_FILTER && advertisment.offer.price <= MAX_PRICE_SUM_FILTER;
     case 'low':
-      return advertisment.offer.price < 10000;
+      return advertisment.offer.price < MIN_PRICE_SUM_FILTER;
     case 'high':
-      return advertisment.offer.price > 50000;
+      return advertisment.offer.price > MAX_PRICE_SUM_FILTER;
   }
 };
 

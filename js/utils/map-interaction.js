@@ -4,18 +4,29 @@ import { debounce } from './debounce.js';
 
 const TOKIO_LAT = 35.689722;
 const TOKIO_LNG = 139.692222;
+const MAIN_PIN_ICON_SIZE_W = 52;
+const MAIN_PIN_ICON_SIZE_L = 52;
+const MAIN_PIN_ANCHOR_SIZE_W = 26;
+const MAIN_PIN_ANCHOR_SIZE_L = 52;
+const SECONDARY_PIN_ICON_SIZE_W = 40;
+const SECONDARY_PIN_ICON_SIZE_L = 40;
+const SECONDARY_PIN_ANCHOR_SIZE_W = 20;
+const SECONDARY_PIN_ANCHOR_SIZE_L = 40;
+const MAX_ADVERTISMENT_PINS_ON_MAP = 10;
+
 const address = document.querySelector('#address');
 const map = L.map('map-canvas');
 const secondaryAddressMarkerGroup = L.layerGroup().addTo(map);
+
 const icon = L.icon({
   iconUrl: 'img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]});
+  iconSize: [SECONDARY_PIN_ICON_SIZE_W, SECONDARY_PIN_ICON_SIZE_L],
+  iconAnchor: [SECONDARY_PIN_ANCHOR_SIZE_W, SECONDARY_PIN_ANCHOR_SIZE_L]});
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_ICON_SIZE_W, MAIN_PIN_ICON_SIZE_L],
+  iconAnchor: [MAIN_PIN_ANCHOR_SIZE_W, MAIN_PIN_ANCHOR_SIZE_L],
 });
 
 const mainAddressMarker = L.marker(
@@ -84,7 +95,7 @@ const clearPopup = () => {
 const createSecondaryAddressMarkers = (advertismentArray) => {
   secondaryAddressMarkerGroup.remove();
   secondaryAddressMarkerGroup.clearLayers();
-  const slicedArray = advertismentArray.slice(0,10);
+  const slicedArray = advertismentArray.slice(0, MAX_ADVERTISMENT_PINS_ON_MAP);
   slicedArray.forEach( (advertisment) => {
     createSecondaryAddressMarker(advertisment);
   });
