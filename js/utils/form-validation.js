@@ -355,6 +355,9 @@ const filterByFeatures = (advertisment) => {
   return true;
 };
 
+const filterAdvertisments = (advertisment) => filterByType(advertisment) && filterByPrice(advertisment) && filterByRooms(advertisment) && filterByGuests(advertisment) && filterByFeatures(advertisment);
+
+
 const createFiltaration = (advertisments) => {
   mapFiltersForm.addEventListener('change', (evt) => {
     evt.preventDefault();
@@ -381,11 +384,7 @@ const createFiltaration = (advertisments) => {
 
     }
     const resultArray = advertisments
-      .filter(filterByType)
-      .filter(filterByPrice)
-      .filter(filterByRooms)
-      .filter(filterByGuests)
-      .filter(filterByFeatures);
+      .filter(filterAdvertisments);
 
     createSecondaryAddressMarkers(resultArray);
   });
