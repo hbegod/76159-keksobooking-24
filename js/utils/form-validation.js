@@ -268,6 +268,7 @@ const resetFilters = () => {
 
 const clearFormData = () => {
   addAdvertForm.reset();
+  priceInput.placeholder = MIN_PRICE_SUM_HOUSE;
   mapFiltersForm.reset();
   putMainAddressMarkerToDefaultPos();
   resetFilters();

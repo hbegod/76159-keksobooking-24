@@ -1,6 +1,9 @@
 import {clearFormData, makeFilterFormActive} from './form-validation.js';
 
-const getData = (onSuccess, onError) => fetch ('https://24.javascript.pages.academy/keksobooking/data',
+const GET_DATA_WEB_ADDRESS = 'https://24.javascript.pages.academy/keksobooking/data';
+const SEND_DATA_WEB_ADDRESS = 'https://24.javascript.pages.academy/keksobooking';
+
+const getData = (onSuccess, onError) => fetch (GET_DATA_WEB_ADDRESS,
   {
     method: 'GET',
     credentials: 'same-origin',
@@ -15,8 +18,7 @@ const getData = (onSuccess, onError) => fetch ('https://24.javascript.pages.acad
     onError(err);
   });
 
-const sendData = (onSuccess, onError, formData) => fetch (
-  'https://24.javascript.pages.academy/keksobooking',
+const sendData = (onSuccess, onError, formData) => fetch (SEND_DATA_WEB_ADDRESS,
   {
     method: 'POST',
     body: formData,

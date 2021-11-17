@@ -3,37 +3,57 @@ const successMessageTemplate = document.querySelector('#success').content.queryS
 const errorSendMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorGetMessageTemplate = document.querySelector('#errorGet').content.querySelector('.errorGet');
 
-const addDocumentEventListners = (elementForModification) => {
-  document.addEventListener('keydown', (evt) => {
+const addEventListners = (elementForModification) => {
+
+  const repeateButton = elementForModification.querySelector('.error__button');
+
+  function clickButtonEventReact () {
+    document.removeEventListener('keydown', escEventReact);
+    document.removeEventListener('click', clickDocEventReact);
+    bodyElement.removeChild(elementForModification);
+  }
+
+  function escEventReact (evt) {
     if(evt.key === 'Escape') {
+      document.removeEventListener('click', clickDocEventReact);
+      if(repeateButton) {
+        repeateButton.removeEventListener('click', clickButtonEventReact);
+      }
       bodyElement.removeChild(elementForModification);
     }
-  }, {once: true});
-  document.addEventListener('click', () => {
+  }
+
+  function clickDocEventReact () {
+    document.removeEventListener('keydown', escEventReact);
+    if(repeateButton) {
+      repeateButton.removeEventListener('click', clickButtonEventReact);
+    }
     bodyElement.removeChild(elementForModification);
-  }, {once: true});
+  }
+
+  document.addEventListener('keydown', escEventReact, {once: true});
+  document.addEventListener('click', clickDocEventReact, {once: true});
+  if(repeateButton) {
+    repeateButton.addEventListener('click', clickButtonEventReact, {once: true});
+  }
 };
 
 const createSuccesSendDataMessage = () => {
   const successMessageElement = successMessageTemplate.cloneNode(true);
   bodyElement.appendChild(successMessageElement);
-  addDocumentEventListners(successMessageElement);
+  addEventListners(successMessageElement);
 };
 
 const createErrorSendDataMessage = () => {
   const errorSendMessageElement = errorSendMessageTemplate.cloneNode(true);
   bodyElement.appendChild(errorSendMessageElement);
-  const repeateButton = errorSendMessageElement.querySelector('.error__button');
-  repeateButton.addEventListener('click', () => {
-    bodyElement.removeChild(errorSendMessageElement);
-  }, {once: true});
-  addDocumentEventListners(errorSendMessageElement);
+  addEventListners(errorSendMessageElement);
 };
 
 const createErrorGetDataMessage = () => {
   const errorGetMessageElement = errorGetMessageTemplate.cloneNode(true);
   bodyElement.appendChild(errorGetMessageElement);
-  addDocumentEventListners(errorGetMessageElement);
+  addEventListners(errorGetMessageElement);
 };
 
 export {createSuccesSendDataMessage, createErrorSendDataMessage, createErrorGetDataMessage};
