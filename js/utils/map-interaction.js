@@ -1,5 +1,6 @@
 import {makeSendFormActive} from './form-validation.js';
 import {createSimilarAdvertismentMarkup} from './markup-generation.js';
+import { debounce } from './debounce.js';
 
 const TOKIO_LAT = 35.689722;
 const TOKIO_LNG = 139.692222;
@@ -73,7 +74,6 @@ const createSecondaryAddressMarker = (advertisment) => {
 
   secondaryAddressMarker.addTo(secondaryAddressMarkerGroup).bindPopup(createSimilarAdvertismentMarkup(advertisment));
 
-  secondaryAddressMarker.addTo(map);
 };
 
 const clearPopup = () => {
@@ -82,10 +82,13 @@ const clearPopup = () => {
 };
 
 const createSecondaryAddressMarkers = (advertismentArray) => {
+  secondaryAddressMarkerGroup.remove();
+  secondaryAddressMarkerGroup.clearLayers();
   const slicedArray = advertismentArray.slice(0,10);
   slicedArray.forEach( (advertisment) => {
     createSecondaryAddressMarker(advertisment);
   });
+  debounce(secondaryAddressMarkerGroup.addTo(map));
 };
 
 export {addMapToPage, createMainAddressMarker, createSecondaryAddressMarker, createSecondaryAddressMarkers, putMainAddressMarkerToDefaultPos, clearPopup};

@@ -1,4 +1,4 @@
-import {putMainAddressMarkerToDefaultPos, clearPopup} from './map-interaction.js';
+import {putMainAddressMarkerToDefaultPos, createSecondaryAddressMarkers} from './map-interaction.js';
 import { sendData } from './server-interaction.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -248,10 +248,27 @@ const addValidation = () => {
   });
 };
 
+let housingTypeFilterValue = 'any';
+let housingPriceFilterValue = 'any';
+let housingRoomsFilterValue = 'any';
+let housingGuestsFilterValue = 'any';
+let housingFeaturesFilterArray = [];
+
+const resetFilters = () => {
+  housingTypeFilterValue = 'any';
+  housingPriceFilterValue = 'any';
+  housingRoomsFilterValue = 'any';
+  housingGuestsFilterValue = 'any';
+  housingFeaturesFilterArray = [];
+  const event = new Event('change');
+  mapFiltersForm.dispatchEvent(event);
+};
+
 const clearFormData = () => {
   addAdvertForm.reset();
+  mapFiltersForm.reset();
   putMainAddressMarkerToDefaultPos();
-  clearPopup();
+  resetFilters();
 };
 
 const addSubmiitListner = (onSuccess, onError) => {
@@ -274,5 +291,102 @@ const addClearFormListener = () => {
 
 };
 
+const filterByType = (advertisment) => {
+  if(housingTypeFilterValue === 'any') {
+    return true;
+  }
+  else {
+    return advertisment.offer.type === housingTypeFilterValue;
+  }
+};
 
-export {addValidation, makePageInactive, makeSendFormActive, makeFilterFormActive, clearFormData, addSubmiitListner, addClearFormListener};
+const filterByPrice = (advertisment) => {
+  switch(housingPriceFilterValue){
+    case 'any':
+      return true;
+    case 'middle':
+      return advertisment.offer.price >= 10000 && advertisment.offer.price <= 50000;
+    case 'low':
+      return advertisment.offer.price < 10000;
+    case 'high':
+      return advertisment.offer.price > 50000;
+  }
+};
+
+const filterByRooms = (advertisment) => {
+  if(housingRoomsFilterValue === 'any') {
+    return true;
+  }
+  else {
+    return advertisment.offer.rooms === +housingRoomsFilterValue;
+  }
+
+};
+
+const filterByGuests = (advertisment) => {
+  if(housingGuestsFilterValue === 'any') {
+    return true;
+  }
+  else {
+    return advertisment.offer.guests === +housingGuestsFilterValue;
+  }
+};
+
+const modifyFeaturesArray = (featureType, isChecked) => {
+  if(isChecked) {
+    housingFeaturesFilterArray.push(featureType);
+  }
+  else {
+    housingFeaturesFilterArray = housingFeaturesFilterArray.filter((feature) => !(feature === featureType));
+  }
+};
+
+const filterByFeatures = (advertisment) => {
+  if(!advertisment.offer.features) {
+    return true;
+  }
+  for (let i = 0; i < housingFeaturesFilterArray.length; i++) {
+    if(!advertisment.offer.features.includes(housingFeaturesFilterArray[i])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const createFiltaration = (advertisments) => {
+  mapFiltersForm.addEventListener('change', (evt) => {
+    evt.preventDefault();
+    const filterTypeId = evt.target.id;
+    switch(filterTypeId){
+      case 'housing-type':
+        housingTypeFilterValue = evt.target.value;
+        break;
+      case 'housing-price':
+        housingPriceFilterValue = evt.target.value;
+        break;
+      case 'housing-rooms':
+        housingRoomsFilterValue = evt.target.value;
+        break;
+      case 'housing-guests':
+        housingGuestsFilterValue = evt.target.value;
+        break;
+      case '':
+        break;
+      default :
+        modifyFeaturesArray(evt.target.value, evt.target.checked);
+        break;
+
+
+    }
+    const resultArray = advertisments
+      .filter(filterByType)
+      .filter(filterByPrice)
+      .filter(filterByRooms)
+      .filter(filterByGuests)
+      .filter(filterByFeatures);
+
+    createSecondaryAddressMarkers(resultArray);
+  });
+};
+
+export {addValidation, makePageInactive, makeSendFormActive, makeFilterFormActive, clearFormData, addSubmiitListner, addClearFormListener, createFiltaration};
