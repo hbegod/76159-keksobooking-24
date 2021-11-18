@@ -1,4 +1,5 @@
 import {putMainAddressMarkerToDefaultPos, createSecondaryAddressMarkers} from './map-interaction.js';
+import {clearPreview} from './picture-interaction.js';
 import { sendData } from './server-interaction.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -270,6 +271,7 @@ const clearFormData = () => {
   addAdvertForm.reset();
   priceInput.placeholder = MIN_PRICE_SUM_HOUSE;
   mapFiltersForm.reset();
+  clearPreview();
   putMainAddressMarkerToDefaultPos();
   resetFilters();
 };
